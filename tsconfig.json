@@ -22,7 +22,9 @@
     "incremental": false,
     "outDir": "./build",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@umami/react-zen": ["./src/lib/zen/index.tsx"],
+      "zen-original": ["./node_modules/@umami/react-zen/dist/index"]
     },
     "plugins": [
       {

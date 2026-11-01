@@ -208,6 +208,14 @@ if (isProd && cloudMode) {
 /** @type {import('next').NextConfig} */
 export default withNextIntl({
   reactStrictMode: false,
+  // `@umami/react-zen` is aliased to our wrapper (src/lib/zen), which re-exports the real
+  // package as `zen-original` and swaps a few components for Animate UI ones.
+  turbopack: {
+    resolveAlias: {
+      '@umami/react-zen': './src/lib/zen/index.tsx',
+      'zen-original': './node_modules/@umami/react-zen/dist/index.mjs',
+    },
+  },
   devIndicators: {
     position: 'bottom-right',
   },

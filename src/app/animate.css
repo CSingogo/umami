@@ -1,0 +1,48 @@
+/*
+ * Tailwind for our own components (src/components/animate, login, sidebar).
+ * Preflight is left out on purpose: react-zen ships its own reset and base styles.
+ * The tokens below map the shadcn/Animate UI names onto zen's theme variables, so
+ * light/dark and the brand accent keep following [data-theme].
+ */
+@import "tailwindcss/theme.css" prefix(tw);
+@import "tailwindcss/utilities.css" prefix(tw) source(none);
+
+/* Only scan the files that use these utilities, and prefix them (`tw:flex`). react-zen ships its
+   own Tailwind build with the same class names, and two unprefixed copies override each other. */
+@source "../components/animate";
+@source "./login";
+@source "./(main)/SideNav.tsx";
+@source "../components/input/UserButton.tsx";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));
+
+@theme inline {
+  --color-background: var(--zen-surface-raised);
+  --color-foreground: var(--zen-fg);
+  --color-card: var(--zen-surface);
+  --color-card-foreground: var(--zen-fg);
+  --color-popover: var(--zen-surface-overlay);
+  --color-popover-foreground: var(--zen-fg);
+  --color-primary: var(--zen-primary);
+  --color-primary-foreground: var(--zen-primary-fg);
+  --color-secondary: var(--zen-interactive-bg);
+  --color-secondary-foreground: var(--zen-fg);
+  --color-muted: var(--zen-interactive-bg);
+  --color-muted-foreground: var(--zen-fg-muted);
+  --color-accent: var(--zen-interactive-bg);
+  --color-accent-foreground: var(--zen-fg);
+  --color-destructive: var(--zen-status-error);
+  --color-border: var(--zen-border);
+  --color-input: var(--zen-border);
+  --color-ring: var(--zen-focus-ring);
+  --color-sidebar: var(--zen-surface);
+  --color-sidebar-foreground: var(--zen-fg);
+  --color-sidebar-primary: var(--zen-primary);
+  --color-sidebar-primary-foreground: var(--zen-primary-fg);
+  --color-sidebar-accent: var(--zen-interactive-bg);
+  --color-sidebar-accent-foreground: var(--zen-fg);
+  --color-sidebar-border: var(--zen-border-muted);
+  --color-sidebar-ring: var(--zen-focus-ring);
+  --animate-ui-sidebar-duration: 0.3s;
+  --animate-ui-sidebar-easing: cubic-bezier(0.32, 0.72, 0, 1);
+}

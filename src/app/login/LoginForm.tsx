@@ -1,14 +1,6 @@
-import {
-  Column,
-  Form,
-  FormButtons,
-  FormField,
-  FormSubmitButton,
-  Heading,
-  Icon,
-  PasswordField,
-  TextField,
-} from '@umami/react-zen';
+import { Form, FormButtons, FormField, FormSubmitButton, PasswordField, TextField } from '@umami/react-zen';
+import { ArrowRight01Icon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { useRouter } from 'next/navigation';
 import { useMessages, useUpdateQuery } from '@/components/hooks';
 import { Logo } from '@/components/svg';
@@ -37,16 +29,21 @@ export function LoginForm() {
   };
 
   return (
-    <Column justifyContent="center" alignItems="center" gap="6">
-      <Icon size="lg">
-        <Logo />
-      </Icon>
-      <Heading>umami</Heading>
+    <div className="tw:flex tw:flex-col tw:gap-6">
+      <div className="tw:flex tw:flex-col tw:items-center tw:gap-3 tw:text-center">
+        <span className="tw:flex tw:size-12 tw:items-center tw:justify-center tw:rounded-xl tw:bg-primary/10 tw:text-primary tw:ring-1 tw:ring-primary/20">
+          <Logo width={26} height={26} />
+        </span>
+        <div className="tw:flex tw:flex-col tw:gap-1">
+          <h1 className="tw:text-xl tw:font-semibold tw:tracking-tight">Welcome back</h1>
+          <p className="tw:text-sm tw:text-muted-foreground">Sign in to your analytics</p>
+        </div>
+      </div>
       <Form
         onSubmit={handleSubmit}
         error={getErrorMessage(error)}
         defaultValues={{ username: '', password: '' }}
-        style={{ minWidth: 300 }}
+        style={{ width: '100%' }}
       >
         <FormField
           label={t(labels.username)}
@@ -72,10 +69,13 @@ export function LoginForm() {
             style={{ flex: 1 }}
             isDisabled={false}
           >
-            {t(labels.login)}
+            <span className="tw:inline-flex tw:items-center tw:gap-1.5">
+              {t(labels.login)}
+              <HugeiconsIcon icon={ArrowRight01Icon} size={16} strokeWidth={2} />
+            </span>
           </FormSubmitButton>
         </FormButtons>
       </Form>
-    </Column>
+    </div>
   );
 }

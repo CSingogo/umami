@@ -6,6 +6,7 @@ import { getBaseUrl } from '@/lib/get-base-url';
 import { Providers } from './Providers';
 import '@umami/react-zen/styles.full.css';
 import './global.css';
+import './animate.css';
 
 const inter = Inter({
   subsets: ['latin'],
