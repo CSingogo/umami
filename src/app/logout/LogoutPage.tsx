@@ -11,9 +11,13 @@ export function LogoutPage() {
 
   useEffect(() => {
     async function logout() {
-      await post('/auth/logout');
-
-      window.location.href = `${process.env.basePath || ''}/login`;
+      try {
+        await post('/auth/logout');
+      } catch {
+        // A stale or already-expired session makes this 401. Still leave the page.
+      } finally {
+        window.location.href = `${process.env.basePath || ''}/login`;
+      }
     }
 
     removeClientAuthToken();
