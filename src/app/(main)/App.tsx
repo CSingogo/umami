@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { MobileNav } from '@/app/(main)/MobileNav';
 import { SideNav } from '@/app/(main)/SideNav';
 import { TopNav } from '@/app/(main)/TopNav';
+import { PageTransition } from '@/components/animate/page-transition';
 import {
   useConfig,
   useLoginQuery,
@@ -78,7 +79,12 @@ export function App({ children }) {
           aria-hidden={needsTwoFactorSetup || undefined}
           style={needsTwoFactorSetup ? { pointerEvents: 'none' } : undefined}
         >
-          {children}
+          <PageTransition
+            effect="flow"
+            className="tw:flex tw:w-full tw:flex-col tw:items-center"
+          >
+            {children}
+          </PageTransition>
         </Column>
       </Column>
       {needsTwoFactorSetup && <TwoFactorSetupModal required={true} />}

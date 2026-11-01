@@ -12,6 +12,7 @@
 @source "../components/animate";
 @source "./login";
 @source "./(main)/SideNav.tsx";
+@source "./(main)/App.tsx";
 @source "../components/input/UserButton.tsx";
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));

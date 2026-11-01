@@ -10,6 +10,7 @@ import {
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Tooltip, TooltipTrigger } from '@umami/react-zen';
 import { motion } from 'motion/react';
+import type { ReactNode } from 'react';
 import { AdminNav } from '@/app/(main)/admin/AdminNav';
 import { SettingsNav } from '@/app/(main)/settings/SettingsNav';
 import { WebsiteNav } from '@/app/(main)/websites/[websiteId]/WebsiteNav';
@@ -21,9 +22,30 @@ import { UserButton } from '@/components/input/UserButton';
 import { Logo } from '@/components/svg';
 import { cn } from '@/lib/cn';
 
-const SPRING = { type: 'spring', stiffness: 320, damping: 32 } as const;
+// One curve and duration for everything that moves, like Animate UI's own sidebar.
+const CURVE = { duration: 0.32, ease: [0.32, 0.72, 0, 1] } as const;
+const OPEN_WIDTH = 240;
+const ICON_WIDTH = 60;
 
 const glyph = (icon: any) => <HugeiconsIcon icon={icon} size={18} strokeWidth={1.75} />;
+
+/** Label that slides and fades with the sidebar instead of popping in and out. */
+function Reveal({ collapsed, children }: { collapsed: boolean; children: ReactNode }) {
+  return (
+    <motion.span
+      initial={false}
+      animate={{
+        width: collapsed ? 0 : 'auto',
+        opacity: collapsed ? 0 : 1,
+        marginLeft: collapsed ? 0 : 10,
+      }}
+      transition={CURVE}
+      className="tw:overflow-hidden tw:whitespace-nowrap"
+    >
+      {children}
+    </motion.span>
+  );
+}
 
 export function SideNav(props: any) {
   const { t, labels } = useMessages();
@@ -51,19 +73,29 @@ export function SideNav(props: any) {
     <motion.aside
       {...props}
       initial={false}
-      animate={{ width: isCollapsed ? 64 : 240 }}
-      transition={SPRING}
+      animate={{ width: isCollapsed ? ICON_WIDTH : OPEN_WIDTH }}
+      transition={CURVE}
       className="tw:m-2 tw:flex tw:min-h-0 tw:grow tw:flex-col tw:overflow-hidden tw:rounded-2xl tw:border tw:border-border tw:bg-card tw:p-2"
     >
-      <div className={cn('tw:flex tw:min-h-10 tw:shrink-0 tw:items-center', isCollapsed ? 'tw:justify-center' : 'tw:justify-between tw:pl-3')}>
-        {!isCollapsed && (
+      <motion.div
+        initial={false}
+        animate={{ paddingLeft: isCollapsed ? 5 : 12 }}
+        transition={CURVE}
+        className="tw:flex tw:min-h-10 tw:shrink-0 tw:items-center tw:justify-between"
+      >
+        <motion.span
+          initial={false}
+          animate={{ width: isCollapsed ? 0 : 'auto', opacity: isCollapsed ? 0 : 1 }}
+          transition={CURVE}
+          className="tw:overflow-hidden tw:whitespace-nowrap"
+        >
           <span className="tw:flex tw:items-center tw:gap-2 tw:font-semibold tw:tracking-tight">
             <Logo />
             umami
           </span>
-        )}
+        </motion.span>
         <PanelButton />
-      </div>
+      </motion.div>
       <OverlayScrollArea
         className={isCollapsed ? styles.collapsed : undefined}
         style={{ flexGrow: 1, minHeight: 0 }}
@@ -77,7 +109,7 @@ export function SideNav(props: any) {
         ) : (
           <Highlight
             hover
-            transition={SPRING}
+            transition={CURVE}
             className="tw:rounded-lg tw:bg-accent"
             controlledItems
           >
@@ -87,26 +119,21 @@ export function SideNav(props: any) {
                 const content = (
                   <span
                     className={cn(
-                      'tw:relative tw:z-10 tw:flex tw:min-h-9 tw:items-center tw:gap-2.5 tw:rounded-lg tw:px-3 tw:text-sm tw:transition-colors',
-                      isCollapsed && 'tw:justify-center tw:px-0',
+                      'tw:relative tw:z-10 tw:flex tw:min-h-9 tw:items-center tw:rounded-lg tw:px-3 tw:text-sm tw:transition-colors',
                       isSelected ? 'tw:bg-accent tw:font-semibold' : 'tw:text-foreground/80',
                     )}
                   >
                     {icon}
-                    {!isCollapsed && <span className="tw:truncate">{label}</span>}
+                    <Reveal collapsed={isCollapsed}>{label}</Reveal>
                   </span>
                 );
                 return (
                   <HighlightItem key={id} value={id}>
                     <Link href={renderUrl(path, false)} role="button" className="tw:block">
-                      {isCollapsed ? (
-                        <TooltipTrigger delay={0}>
-                          {content}
-                          <Tooltip placement="right">{label}</Tooltip>
-                        </TooltipTrigger>
-                      ) : (
-                        content
-                      )}
+                      <TooltipTrigger delay={0} isDisabled={!isCollapsed}>
+                        {content}
+                        <Tooltip placement="right">{label}</Tooltip>
+                      </TooltipTrigger>
                     </Link>
                   </HighlightItem>
                 );
@@ -132,7 +159,7 @@ function PanelButton() {
       onClick={() => setIsCollapsed(!isCollapsed)}
       className="tw:flex tw:size-8 tw:items-center tw:justify-center tw:rounded-lg tw:text-muted-foreground tw:outline-none tw:transition-colors tw:hover:bg-accent tw:hover:text-foreground tw:focus-visible:ring-2 tw:focus-visible:ring-ring"
     >
-      <motion.span animate={{ rotate: isCollapsed ? 180 : 0 }} transition={SPRING} className="tw:flex">
+      <motion.span animate={{ rotate: isCollapsed ? 180 : 0 }} transition={CURVE} className="tw:flex">
         {glyph(SidebarLeftIcon)}
       </motion.span>
     </button>
